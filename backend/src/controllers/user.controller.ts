@@ -1,12 +1,18 @@
 import { Request, Response } from "express";
-import User from "../models/user.model";
 import bcrypt from "bcryptjs";
+import { validationResult } from "express-validator";
+import User from "../models/user.model";
 import { verifyEmail } from "../helpers";
-
 
 export const SignUpUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
+
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
 
     if ([name, email, password].some((field) => field.trim() === "")) {
       return res.status(400).json({ msg: "Every field is required!" });
@@ -69,37 +75,52 @@ export const updateUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
 
-    const { name, email } = req.body;
-
-    if ([name, email].some((field) => field.trim() === "")) {
-      return res.status(400).json({ msg: "Every field is required!" });
-    }
-
     if (!id) {
       return res.status(400).json({ msg: "id is required!" });
     }
 
-    const updatedUser = await User.findOneAndUpdate({
-      _id: id,
-      name,
-      email,
-    });
+    const { name, email } = req.body;
 
-    return res.status(200).json({ msg: "User Updated!", user: updatedUser });
+    let userFields: any = {}; 
+
+    if (name) userFields.name = name;
+    if (email) userFields.email = email;
+
+    let user = await User.findById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        msg: 'User not found',
+      });
+    }
+
+    if (req.body?.user && req.body?.user.id.toString() !== user.id.toString()) {
+      return res.status(401).json({
+        msg: 'Invalid authorization',
+      });
+    }
+
+    user = await User.findByIdAndUpdate(
+      id,
+      { $set: userFields },
+      { new: true }, 
+    ).select("-password");
+
+    return res.status(200).json({ msg: "User Updated!", user });
   } catch (error) {
-    console.log(`User-Updated-Error`);
+    console.log(`User-Updated-Error`, error);
     return res
       .status(500)
-      .json({ msg: "An error occured while updating user" });
+      .json({ msg: "An error occurred while updating user" });
   }
 };
 
 export const getAllUser = async (req: Request, res: Response) => {
   try {
-    const users = await User.find({});
-    return res.status(200).json({ users });
+      const users = await User.find({}).select("name email");
+      return res.status(200).json({ users });
   } catch (error) {
-    console.log(`User-Get-Error`);
-    return res.status(500).json({ msg: "An error occured while getting user" });
+      console.log(`User-Get-Error`, error);
+      return res.status(500).json({ msg: "An error occured while getting user" });
   }
 };
