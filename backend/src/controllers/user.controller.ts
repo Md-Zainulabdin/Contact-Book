@@ -4,6 +4,28 @@ import { validationResult } from "express-validator";
 import User from "../models/user.model";
 import { verifyEmail } from "../helpers";
 
+/**
+ * @route GET /api/v1/users
+ * @desc Get all new users
+ * @access public
+ */
+
+export const getAllUser = async (req: Request, res: Response) => {
+  try {
+      const users = await User.find({}).select("name email");
+      return res.status(200).json({ users });
+  } catch (error) {
+      console.log(`User-Get-Error`, error);
+      return res.status(500).json({ msg: "An error occured while getting user" });
+  }
+};
+
+/**
+ * @route POST /api/v1/user
+ * @desc Create a new user
+ * @access public
+ */
+
 export const SignUpUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -50,6 +72,12 @@ export const SignUpUser = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @route DELETE /api/v1/user/:id
+ * @desc Delete a new user
+ * @access private
+ */
+
 export const removeUser = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
@@ -70,6 +98,12 @@ export const removeUser = async (req: Request, res: Response) => {
       .json({ msg: "An error occured while removing user" });
   }
 };
+
+/**
+ * @route PUT /api/v1/user/:id
+ * @desc Update a new user
+ * @access private
+ */
 
 export const updateUser = async (req: Request, res: Response) => {
   try {
@@ -115,12 +149,3 @@ export const updateUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllUser = async (req: Request, res: Response) => {
-  try {
-      const users = await User.find({}).select("name email");
-      return res.status(200).json({ users });
-  } catch (error) {
-      console.log(`User-Get-Error`, error);
-      return res.status(500).json({ msg: "An error occured while getting user" });
-  }
-};

@@ -22,7 +22,7 @@ router
     createContact
   );
 router.route("/contact/:id").put(auth, updateContact);
-router.route("/contact/delete/:id").delete(auth, deleteContact);
+router.route("/contact/:id").delete(auth, deleteContact);
 router.route("/contacts").get(auth, getAllContacts);
 
 export default router;

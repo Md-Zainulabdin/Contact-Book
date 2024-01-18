@@ -2,6 +2,31 @@ import type { Request, Response } from "express";
 import Contact from "../models/contact.model";
 import { validationResult } from "express-validator";
 
+/**
+ * @route GET /api/v1/contacts
+ * @desc Get all contacts
+ * @access private
+ */
+
+export const getAllContacts = async (req: Request, res: Response) => {
+  try {
+    const contacts = await Contact.find({user: req.body?.user.id}).sort({
+      created_at: -1,
+    });
+
+    return res.status(200).json({ contacts });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+/**
+ * @route POST /api/v1/contact
+ * @desc Create a new contacts
+ * @access private
+ */
+
 export const createContact = async (req: Request, res: Response) => {
   try {
     const { name, email, phone } = req.body;
@@ -26,6 +51,12 @@ export const createContact = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+/**
+ * @route PUT /api/v1/contact/:id
+ * @desc Update contact by id
+ * @access private
+ */
 
 export const updateContact = async (req: Request, res: Response) => {
   try {
@@ -75,21 +106,31 @@ export const updateContact = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * @route Delete /api/v1/contact/:id
+ * @desc Delete contact by id
+ * @access private
+ */
+
 export const deleteContact = async (req: Request, res: Response) => {
   try {
     const id = req.params.id;
+    
 
     if (!id) {
       return res.status(400).json({ msg: "id is required!" });
     }
 
-    let contact = await Contact.findById(id);
-
+    let contact = await Contact.findById({
+      _id: id,
+    });
+    
     if (!contact) {
       return res.status(400).json({
         msg: "Contact not found",
       });
     }
+    
 
     const userFromRequest = req.body?.user;
 
@@ -113,15 +154,3 @@ export const deleteContact = async (req: Request, res: Response) => {
   }
 };
 
-export const getAllContacts = async (req: Request, res: Response) => {
-  try {
-    const contacts = await Contact.find().sort({
-      created_at: -1,
-    });
-
-    return res.status(200).json({ contacts });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Server error" });
-  }
-};
