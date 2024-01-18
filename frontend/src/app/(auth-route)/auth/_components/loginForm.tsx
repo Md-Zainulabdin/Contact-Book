@@ -6,6 +6,8 @@ import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Loader2 } from "lucide-react";
+
 
 import {
   Form,
@@ -35,6 +37,10 @@ type LoginFormValues = z.infer<typeof formSchema>;
 
 // Define the LoginForm component
 const LoginForm: React.FC = () => {
+    // Spinner
+    const Icons = {
+      spinner: Loader2,
+    };
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -108,6 +114,7 @@ const LoginForm: React.FC = () => {
             />
 
             <Button disabled={loading} type="submit" className="w-full">
+            {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
               Login
             </Button>
           </form>

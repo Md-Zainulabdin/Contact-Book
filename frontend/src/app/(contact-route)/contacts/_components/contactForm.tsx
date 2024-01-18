@@ -1,13 +1,13 @@
 "use client";
 
 // Import necessary modules and components
-import { useState } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import * as z from "zod";
 import axios from "axios";
-import { baseUrl } from "@/constants";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
 
+import { Loader2 } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -19,8 +19,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Contact } from "@/types";
-import { useRouter } from "next/navigation";
+import { baseUrl } from "@/constants";
 import { getToken } from "@/helpers";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 // Define the form schema
 const formSchema = z.object({
@@ -41,6 +42,11 @@ interface ContactFormProps {
 
 // Define the ContactForm component
 const ContactForm: React.FC<ContactFormProps> = ({ initialData, onClose }) => {
+  // Spinner
+  const Icons = {
+    spinner: Loader2,
+  };
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -55,28 +61,31 @@ const ContactForm: React.FC<ContactFormProps> = ({ initialData, onClose }) => {
 
   async function onSubmit(data: ContactFormValues) {
     setLoading(true);
-    
+    const token = await getToken();
+
     try {
       if (initialData) {
         const response = await axios.put(
           `${baseUrl}/contact/${initialData._id}`,
-          data
+          data,
+          {
+            headers: {
+              Authorization: `${token?.value}`,
+            },
+          }
         );
 
-        router.push("/contacts");
-        // Check if onClose is defined before calling it
         onClose && onClose();
         router.refresh();
       } else {
-        const token = await getToken();
-        
         const response = await axios.post(`${baseUrl}/contact`, data, {
           headers: {
-            "Authorization": `${token?.value}`,
+            Authorization: `${token?.value}`,
           },
         });
+
         onClose && onClose();
-        router.refresh();
+        router.refresh(); 
       }
     } catch (error) {
       console.log("error", error);
@@ -146,10 +155,12 @@ const ContactForm: React.FC<ContactFormProps> = ({ initialData, onClose }) => {
 
             {initialData ? (
               <Button disabled={loading} type="submit" className="w-full">
+                {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
                 Update
               </Button>
             ) : (
               <Button disabled={loading} type="submit" className="w-full">
+                {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
                 Create
               </Button>
             )}

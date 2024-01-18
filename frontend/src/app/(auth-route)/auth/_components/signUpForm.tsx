@@ -7,6 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+
 import {
   Form,
   FormControl,
@@ -33,6 +35,11 @@ type RegisterFormValues = z.infer<typeof formSchema>;
 
 // Define the RegisterForm component
 const RegisterForm: React.FC = () => {
+  // Spinner
+  const Icons = {
+    spinner: Loader2,
+  };
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -127,6 +134,9 @@ const RegisterForm: React.FC = () => {
               type="submit"
               className="w-full rounded-md bg-primary p-2 text-white transition-colors"
             >
+              {loading && (
+                <Icons.spinner className="h-4 w-4 animate-spin mr-2" />
+              )}
               Register
             </Button>
           </form>
