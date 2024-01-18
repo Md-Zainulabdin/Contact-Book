@@ -9,3 +9,7 @@ export const setToken = async (token: string) => {
 export const deleteToken = async () => {
   cookies().delete(`auth_token`);
 };
+
+export const getToken = async () => {
+  return cookies().get("auth_token");
+};
