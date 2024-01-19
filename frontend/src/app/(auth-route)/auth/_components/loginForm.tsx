@@ -8,7 +8,6 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Loader2 } from "lucide-react";
 
-
 import {
   Form,
   FormControl,
@@ -23,6 +22,7 @@ import { Button } from "@/components/ui/button";
 import { baseUrl } from "@/constants";
 import { setToken } from "@/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 // Define the form schema
 const formSchema = z.object({
@@ -37,10 +37,10 @@ type LoginFormValues = z.infer<typeof formSchema>;
 
 // Define the LoginForm component
 const LoginForm: React.FC = () => {
-    // Spinner
-    const Icons = {
-      spinner: Loader2,
-    };
+  // Spinner
+  const Icons = {
+    spinner: Loader2,
+  };
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -62,8 +62,10 @@ const LoginForm: React.FC = () => {
         // Save token to cookie and redirect user to dashboard page
         const token = response?.data?.token;
         setToken(token);
+        toast.success("Login Successfully");
       }
     } catch (error) {
+      toast.error("Something went wrong");
       console.log("error", error);
     } finally {
       setLoading(false);
@@ -114,7 +116,9 @@ const LoginForm: React.FC = () => {
             />
 
             <Button disabled={loading} type="submit" className="w-full">
-            {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
+              {loading && (
+                <Icons.spinner className="h-4 w-4 animate-spin mr-2" />
+              )}
               Login
             </Button>
           </form>

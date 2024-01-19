@@ -20,6 +20,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { baseUrl } from "@/constants";
+import toast from "react-hot-toast";
 
 // Define the form schema
 const formSchema = z.object({
@@ -60,9 +61,11 @@ const RegisterForm: React.FC = () => {
 
       if (response.data) {
         // Redirect to Login after successful registration
+        toast.success("Signup successful")
         router.push("/auth/login");
       }
     } catch (error) {
+      toast.error("Something went wrong");
       console.log("error", error);
     } finally {
       setLoading(false);

@@ -22,6 +22,7 @@ import { Contact } from "@/types";
 import { baseUrl } from "@/constants";
 import { getToken } from "@/helpers";
 import { zodResolver } from "@hookform/resolvers/zod";
+import toast from "react-hot-toast";
 
 // Define the form schema
 const formSchema = z.object({
@@ -84,10 +85,17 @@ const ContactForm: React.FC<ContactFormProps> = ({ initialData, onClose }) => {
           },
         });
 
+        if (response.data) {
+          toast.success(response?.data.msg);
+        }
+
+        console.log(response?.data.msg);
+
         onClose && onClose();
-        router.refresh(); 
+        router.refresh();
       }
     } catch (error) {
+      toast.error("Something went wrong");
       console.log("error", error);
     } finally {
       setLoading(false);
@@ -155,12 +163,16 @@ const ContactForm: React.FC<ContactFormProps> = ({ initialData, onClose }) => {
 
             {initialData ? (
               <Button disabled={loading} type="submit" className="w-full">
-                {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
+                {loading && (
+                  <Icons.spinner className="h-4 w-4 animate-spin mr-2" />
+                )}
                 Update
               </Button>
             ) : (
               <Button disabled={loading} type="submit" className="w-full">
-                {loading && <Icons.spinner className="h-4 w-4 animate-spin mr-2" />}
+                {loading && (
+                  <Icons.spinner className="h-4 w-4 animate-spin mr-2" />
+                )}
                 Create
               </Button>
             )}
