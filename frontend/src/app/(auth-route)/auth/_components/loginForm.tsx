@@ -63,9 +63,11 @@ const LoginForm: React.FC = () => {
         const token = response?.data?.token;
         setToken(token);
         toast.success("Login Successfully");
+      } else {
+        toast.error(response?.data.msg);
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error("Invalid credentials");
       console.log("error", error);
     } finally {
       setLoading(false);
