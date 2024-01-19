@@ -15,6 +15,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import axios from "axios";
 import { Contact } from "@/types";
+import AlertModal from "@/components/modal/Alert-modal";
+import { getToken } from "@/helpers";
+import { baseUrl } from "@/constants";
+import { Modal } from "@/components/ui/modal";
+import ContactForm from "./contactForm";
 // import AlertModal from "@/components/modals/Alert-Modal";
 
 interface CellActionProps {
@@ -24,13 +29,19 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
   const router = useRouter();
 
   const onDeleteHandler = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/contact/${data._id}`);
+      const token = await getToken();
+      await axios.delete(`${baseUrl}/contact/${data._id}`, {
+        headers: {
+          Authorization: `${token?.value}`,
+        },
+      });
       router.refresh();
     } catch (error) {
       console.log("Error deleting contact", error);
@@ -42,12 +53,21 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
 
   return (
     <>
-      {/* <AlertModal
+      <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={onDeleteHandler}
         loading={loading}
-      /> */}
+      />
+
+      <Modal
+        title="Update Contact"
+        onClose={() => setUpdateOpen(false)}
+        isOpen={updateOpen}
+        description="update your contact with new data"
+      >
+        <ContactForm initialData={data} onClose={() => setUpdateOpen(false)} />
+      </Modal>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -58,7 +78,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[150px]">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setOpen(!open)}>
+          <DropdownMenuItem onClick={() => setUpdateOpen(true)}>
             <Edit className="mr-2 h-4 w-4" />
             Update
           </DropdownMenuItem>

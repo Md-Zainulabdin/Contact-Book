@@ -5,8 +5,6 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   const cookie = cookies();
   
   if (cookie.get("auth_token")) {
-    console.log(cookie.get("auth_token"));
-    
     redirect("/contacts");
   }
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { cookies } from "next/headers";
-// import Logout from "./Logout";
+import Logout from "./Logout";
 
 const Navbar = () => {
   const cookie = cookies();
@@ -22,13 +22,13 @@ const Navbar = () => {
           <span className="font-medium text-muted-foreground">Contacts</span>
         </Link>
 
-        {/* {session ? (
+        {session ? (
           <Logout />
-        ) : ( */}
+        ) : (
           <Button size={"sm"} className="px-6">
             <Link href="/auth/login">Login</Link>
           </Button>
-        {/* )} */}
+        )}
       </div>
     </nav>
   );

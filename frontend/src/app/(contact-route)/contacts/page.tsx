@@ -21,7 +21,7 @@ const ContactPage = async () => {
   const {contacts} = await getContacts();
 
   return (
-    <div className="m-auto my-12 max-w-7xl px-12">
+    <div className="m-auto my-12 max-w-7xl px-6 md:px-12">
       <div className="header flex w-full items-center justify-between pb-12">
         <div>
           <h1 className="text-2xl font-bold leading-tight tracking-tighter md:text-4xl lg:leading-[1.1]">
