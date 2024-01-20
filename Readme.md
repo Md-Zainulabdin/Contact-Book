@@ -8,7 +8,7 @@
   <h3 align="center">A Mern Contact Book</h3>
   <div align="center">
     Streamline your contacts with our user-friendly Contact Management System
-
+  </div>
 </div>
 
 ## 📋 <a name="table">Table of Contents</a>
@@ -35,42 +35,40 @@ Discover the power of the MERN stack as we present a cutting-edge Contact App, w
 
 ## <a name="features">🔋 Features</a>
 
-👉 **State-of-the-Art Technology Stack**: 
+👉 **State-of-the-Art Technology Stack**:
 
 - MERN stack leveraging MongoDB, Express.js, React, and Node.js.
 - TypeScript for enhanced frontend development.
 
-👉 **Advanced Authentication and Authorization**: 
+👉 **Advanced Authentication and Authorization**:
 
 - Secure user authentication using JWT tokens and cookies.
 - Authorization mechanisms ensuring data privacy and access control.
 
-👉 **Seamless Frontend Design**: 
+👉 **Seamless Frontend Design**:
 
 - Next.js with TypeScript for a smooth and intuitive user interface.
 - Responsive design for optimal user experience across devices.
 
-👉 **Fully Functional Contact Creation System**: 
+👉 **Fully Functional Contact Creation System**:
 
 - Robust backend with Node.js and Express.js for efficient data handling.
 - MongoDB for seamless storage and retrieval of contact information.
 
-👉 **Efficient User Management**: 
+👉 **Efficient User Management**:
 
 - User-friendly interfaces for user registration and profile management.
 - Streamlined processes for creating, editing, and deleting contacts.
 
-👉 **Optimized Performance**: 
+👉 **Optimized Performance**:
 
 - Next.js features for optimal performance and server-side rendering.
 - Efficient handling of data with MongoDB for a responsive application
 
-👉 **Documentation**: 
+👉 **Documentation**:
 
 - Well-documented codebase for easy understanding and future development.
 - README file providing clear instructions for setup and usage.
-
-
 
 Explore the MERN Contact App for a feature-rich and user-friendly contact management experience!
 
